@@ -24,228 +24,246 @@ The feature selection techniques used are:
 3.Embedded Method
 
 # CODING AND OUTPUT:
-```
-NAME  : NAVEEN KUMAR P
-REG NO: 212224240102
-```
-```python
-
- import pandas as pd
- import numpy as np
- import seaborn as sns
- from sklearn.model_selection import train_test_split
- from sklearn.neighbors import KNeighborsClassifier
- from sklearn.metrics import accuracy_score, confusion_matrix
- data=pd.read_csv("income.csv",na_values=[ " ?"])
- data
 
 ```
-<img width="1636" height="475" alt="image" src="https://github.com/user-attachments/assets/398c96e2-2b62-4606-bb78-35fc5d1e6a7c" />
-
-```python
-
- data.isnull().sum()
-
+import pandas as pd 
+from scipy import stats 
+import numpy as np
+df=pd.read_csv("bmi.csv") 
+df.head()
 ```
-<img width="1243" height="559" alt="image" src="https://github.com/user-attachments/assets/d1e3a404-de0a-4e03-b326-da4665e3121c" />
 
-
-```python
-
- missing=data[data.isnull().any(axis=1)]
- missing
-
-```
-<img width="1527" height="470" alt="image" src="https://github.com/user-attachments/assets/82f91690-b1e6-44f7-9176-14e455e5e8e0" />
-
-
-```python
-
-data2=data.dropna(axis=0)
-data2
-
-```
-<img width="1599" height="479" alt="image" src="https://github.com/user-attachments/assets/c5470e18-06b5-4b58-aa90-329a88c1d051" />
-
-
-```python
-
- sal=data["SalStat"]
- data2["SalStat"]=data["SalStat"].map({' less than or equal to 50,000':0,' greater than 50,000':1})
- print(data2['SalStat'])
-
-```
-<img width="1476" height="372" alt="image" src="https://github.com/user-attachments/assets/bdd27258-2001-4b0c-aa4e-a53152f3e046" />
-
-
-```python
-
- sal2=data2['SalStat']
- dfs=pd.concat([sal,sal2],axis=1)
- dfs
-
-```
-<img width="1208" height="483" alt="image" src="https://github.com/user-attachments/assets/4ccbac62-f88c-4d19-9558-0142813bd6bd" />
-
-
-```python
-
- data2
-
-```
-<img width="1466" height="442" alt="image" src="https://github.com/user-attachments/assets/c4fb369a-b2ed-4a64-9612-e9cdf77b13ad" />
-
-
-```python
-
- new_data=pd.get_dummies(data2, drop_first=True)
- new_data
-
-```
-<img width="1820" height="273" alt="image" src="https://github.com/user-attachments/assets/71081849-45e9-4f43-a0df-f7eba150ecd9" />
-
-
-```python
-
-columns_list=list(new_data.columns)
-print(columns_list)
-
-```
-['age', 'capitalgain', 'capitalloss', 'hoursperweek', 'SalStat', 'JobType_ Local-gov', 'JobType_ Private', 'JobType_ Self-emp-inc', 'JobType_ Self-emp-not-inc', 'JobType_ State-gov', 'JobType_ Without-pay', 'EdType_ 11th', 'EdType_ 12th', 'EdType_ 1st-4th', 'EdType_ 5th-6th', 'EdType_ 7th-8th', 'EdType_ 9th', 'EdType_ Assoc-acdm', 'EdType_ Assoc-voc', 'EdType_ Bachelors', 'EdType_ Doctorate', 'EdType_ HS-grad', 'EdType_ Masters', 'EdType_ Preschool', 'EdType_ Prof-school', 'EdType_ Some-college', 'maritalstatus_ Married-AF-spouse', 'maritalstatus_ Married-civ-spouse', 'maritalstatus_ Married-spouse-absent', 'maritalstatus_ Never-married', 'maritalstatus_ Separated', 'maritalstatus_ Widowed', 'occupation_ Armed-Forces', 'occupation_ Craft-repair', 'occupation_ Exec-managerial', 'occupation_ Farming-fishing', 'occupation_ Handlers-cleaners', 'occupation_ Machine-op-inspct', 'occupation_ Other-service', 'occupation_ Priv-house-serv', 'occupation_ Prof-specialty', 'occupation_ Protective-serv', 'occupation_ Sales', 'occupation_ Tech-support', 'occupation_ Transport-moving', 'relationship_ Not-in-family', 'relationship_ Other-relative', 'relationship_ Own-child', 'relationship_ Unmarried', 'relationship_ Wife', 'race_ Asian-Pac-Islander', 'race_ Black', 'race_ Other', 'race_ White', 'gender_ Male', 'nativecountry_ Canada', 'nativecountry_ China', 'nativecountry_ Columbia', 'nativecountry_ Cuba', 'nativecountry_ Dominican-Republic', 'nativecountry_ Ecuador', 'nativecountry_ El-Salvador', 'nativecountry_ England', 'nativecountry_ France', 'nativecountry_ Germany', 'nativecountry_ Greece', 'nativecountry_ Guatemala', 'nativecountry_ Haiti', 'nativecountry_ Holand-Netherlands', 'nativecountry_ Honduras', 'nativecountry_ Hong', 'nativecountry_ Hungary', 'nativecountry_ India', 'nativecountry_ Iran', 'nativecountry_ Ireland', 'nativecountry_ Italy', 'nativecountry_ Jamaica', 'nativecountry_ Japan', 'nativecountry_ Laos', 'nativecountry_ Mexico', 'nativecountry_ Nicaragua', 'nativecountry_ Outlying-US(Guam-USVI-etc)', 'nativecountry_ Peru', 'nativecountry_ Philippines', 'nativecountry_ Poland', 'nativecountry_ Portugal', 'nativecountry_ Puerto-Rico', 'nativecountry_ Scotland', 'nativecountry_ South', 'nativecountry_ Taiwan', 'nativecountry_ Thailand', 'nativecountry_ Trinadad&Tobago', 'nativecountry_ United-States', 'nativecountry_ Vietnam', 'nativecountry_ Yugoslavia']
-
-```python
-
- features=list(set(columns_list)-set(['SalStat']))
- print(features)
-
-```
-['nativecountry_ Taiwan', 'maritalstatus_ Never-married', 'nativecountry_ Iran', 'maritalstatus_ Separated', 'occupation_ Armed-Forces', 'nativecountry_ Portugal', 'nativecountry_ United-States', 'occupation_ Tech-support', 'race_ Other', 'JobType_ Private', 'hoursperweek', 'relationship_ Unmarried', 'occupation_ Craft-repair', 'occupation_ Transport-moving', 'EdType_ 9th', 'JobType_ Local-gov', 'EdType_ Preschool', 'nativecountry_ Yugoslavia', 'JobType_ State-gov', 'maritalstatus_ Married-spouse-absent', 'nativecountry_ Ireland', 'nativecountry_ Poland', 'nativecountry_ Columbia', 'nativecountry_ Hong', 'nativecountry_ Puerto-Rico', 'EdType_ 7th-8th', 'nativecountry_ Guatemala', 'nativecountry_ Philippines', 'occupation_ Exec-managerial', 'nativecountry_ Scotland', 'race_ White', 'relationship_ Own-child', 'occupation_ Priv-house-serv', 'JobType_ Self-emp-inc', 'EdType_ HS-grad', 'nativecountry_ China', 'nativecountry_ Peru', 'nativecountry_ France', 'nativecountry_ South', 'EdType_ 5th-6th', 'occupation_ Protective-serv', 'nativecountry_ Dominican-Republic', 'nativecountry_ Ecuador', 'nativecountry_ Canada', 'nativecountry_ Trinadad&Tobago', 'occupation_ Other-service', 'maritalstatus_ Widowed', 'nativecountry_ Nicaragua', 'race_ Asian-Pac-Islander', 'JobType_ Self-emp-not-inc', 'nativecountry_ Hungary', 'nativecountry_ Italy', 'capitalgain', 'maritalstatus_ Married-civ-spouse', 'occupation_ Prof-specialty', 'nativecountry_ England', 'nativecountry_ Thailand', 'nativecountry_ India', 'nativecountry_ Outlying-US(Guam-USVI-etc)', 'relationship_ Wife', 'EdType_ Prof-school', 'maritalstatus_ Married-AF-spouse', 'occupation_ Farming-fishing', 'race_ Black', 'relationship_ Other-relative', 'EdType_ 12th', 'nativecountry_ Japan', 'nativecountry_ Germany', 'nativecountry_ Cuba', 'JobType_ Without-pay', 'occupation_ Sales', 'nativecountry_ Jamaica', 'EdType_ 11th', 'nativecountry_ Laos', 'nativecountry_ Holand-Netherlands', 'nativecountry_ Honduras', 'relationship_ Not-in-family', 'EdType_ Doctorate', 'EdType_ Masters', 'nativecountry_ Haiti', 'occupation_ Machine-op-inspct', 'nativecountry_ El-Salvador', 'EdType_ Assoc-acdm', 'gender_ Male', 'EdType_ Bachelors', 'occupation_ Handlers-cleaners', 'capitalloss', 'nativecountry_ Greece', 'age', 'nativecountry_ Vietnam', 'nativecountry_ Mexico', 'EdType_ Assoc-voc', 'EdType_ Some-college', 'EdType_ 1st-4th']
-
-```python
-
- y=new_data['SalStat'].values
- print(y)
-
-```
-<img width="484" height="35" alt="image" src="https://github.com/user-attachments/assets/a3487d9c-971a-411d-b619-ee02e307b7d2" />
-
-```python
-
- x=new_data[features].values
- print(x)
-
-```
-<img width="405" height="127" alt="image" src="https://github.com/user-attachments/assets/44b4733c-8627-41cc-a183-2d05d955e8cb" />
-
-
-```python
-
-train_x,test_x,train_y,test_y=train_test_split(x,y,test_size=0.3,random_state=0)
-KNN_classifier=KNeighborsClassifier(n_neighbors = 5)
-KNN_classifier.fit(train_x,train_y)
-
-```
-<img width="164" height="57" alt="image" src="https://github.com/user-attachments/assets/bb4aca7b-76d2-4c60-8779-6cece18ae1f2" />
-
-```python
-
- prediction=KNN_classifier.predict(test_x)
- confusionMatrix=confusion_matrix(test_y, prediction)
- print(confusionMatrix)
-
-```
-<img width="358" height="83" alt="image" src="https://github.com/user-attachments/assets/be689b21-e157-47ee-8f7b-66eef6dab4e9" />
-
-
-```python
-
- accuracy_score=accuracy_score(test_y,prediction)
- print(accuracy_score)
-
-```
-0.8392087523483258
-
-```python
-
- print("Misclassified Samples : %d" % (test_y !=prediction).sum())
+<img width="362" height="197" alt="image" src="https://github.com/user-attachments/assets/af83155a-e2f6-4026-b196-cbb295017fb3" />
 
 
 ```
-Misclassified Samples : 1455
+df_null_sum=df.isnull().sum() 
+df_null_sum
+```
 
-```python
-
- data.shape
-
+<img width="223" height="106" alt="image" src="https://github.com/user-attachments/assets/94df3f63-aa6c-48df-8e18-2d2698cdc5cd" />
 
 ```
-(31978, 13)
+df.dropna()
+```
 
-```python
+<img width="367" height="360" alt="image" src="https://github.com/user-attachments/assets/d9323cab-2af1-4829-891b-1a22a9c6f76f" />
 
+```
+max_vals = np.max(np.abs(df[['Height', 'Weight']]), axis=0) 
+max_vals
+```
+
+<img width="200" height="71" alt="image" src="https://github.com/user-attachments/assets/75c38991-bb11-41e9-9b10-90a20d711d72" />
+
+```
+from sklearn.preprocessing import StandardScaler 
+df1=pd.read_csv("bmi.csv") 
+df1.head()
+```
+
+<img width="352" height="191" alt="image" src="https://github.com/user-attachments/assets/508920a3-3d8a-4e47-996c-1c9f4c3df871" />
+
+```
+sc=StandardScaler()
+df1[['Height','Weight']]=sc.fit_transform(df1[['Height','Weight']]) 
+df1.head(10)
+```
+
+<img width="412" height="322" alt="image" src="https://github.com/user-attachments/assets/04863273-8235-4db6-9c66-8f69992a1727" />
+
+```
+from sklearn.preprocessing import MinMaxScaler 
+scaler=MinMaxScaler() 
+df[['Height','Weight']]=scaler.fit_transform(df[['Height','Weight']])
+df.head(10)
+```
+
+<img width="395" height="314" alt="image" src="https://github.com/user-attachments/assets/a38c7429-867f-40fa-b5df-4e04d618295a" />
+
+```
+from sklearn.preprocessing import MaxAbsScaler 
+scaler = MaxAbsScaler() 
+df3=pd.read_csv("bmi.csv") 
+df3.head()
+df[['Height','Weight']]=scaler.fit_transform(df[['Height','Weight']]) 
+df
+```
+
+<img width="392" height="363" alt="image" src="https://github.com/user-attachments/assets/5691e89b-dd0b-40a1-a9a2-4c241c20b976" />
+
+```
+from sklearn.preprocessing import RobustScaler 
+scaler = RobustScaler() 
+df3[['Height','Weight']]=scaler.fit_transform(df3[['Height','Weight']]) 
+df3.head()
+```
+
+<img width="399" height="165" alt="image" src="https://github.com/user-attachments/assets/6380148d-cf9e-47fb-92a4-fadf3b20c1ef" />
+
+```
+df=pd.read_csv("income(1) (1).csv") 
+df.info()
+```
+
+<img width="419" height="356" alt="image" src="https://github.com/user-attachments/assets/d9a664a4-b82e-4192-9993-af7618b31004" />
+
+```
+df_null_sum=df.isnull().sum() 
+df_null_sum
+```
+
+<img width="321" height="250" alt="image" src="https://github.com/user-attachments/assets/9a0f4e60-47d3-44d8-b725-4901e8402766" />
+
+```
+categorical_columns = ['JobType', 'EdType', 'maritalstatus', 'occupation', 'relationship', 'race', 'gender', 'nativecountry'] 
+df[categorical_columns] = df[categorical_columns].astype('category')
+df[categorical_columns]
+```
+
+<img width="704" height="498" alt="image" src="https://github.com/user-attachments/assets/f10bf1b3-ece7-4a01-959c-1efd8856d5e3" />
+
+```
+df[categorical_columns] = df[categorical_columns].astype('category') 
+df[categorical_columns] = df[categorical_columns].apply(lambda x: x.cat.codes) 
+df[categorical_columns]
+```
+
+<img width="722" height="380" alt="image" src="https://github.com/user-attachments/assets/58b5be13-6e2b-4921-87f8-a203f95ab0fc" />
+
+```
+X = df.drop(columns=['SalStat']) 
+y = df['SalStat']
+from sklearn.model_selection import train_test_split 
+from sklearn.metrics import accuracy_score 
+from sklearn.ensemble import RandomForestClassifier 
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+rf = RandomForestClassifier(n_estimators=100, random_state=42) 
+rf.fit(X_train, y_train)
+```
+
+<img width="386" height="102" alt="image" src="https://github.com/user-attachments/assets/c4185ef4-0425-4d08-bbdd-eee8d1a48ca3" />
+
+```
+y_pred = rf.predict(X_test)
+df=pd.read_csv("income(1) (1).csv") 
+df.info()
+```
+
+<img width="379" height="346" alt="image" src="https://github.com/user-attachments/assets/d4ec62bf-96a2-4e39-8ca5-06ceb642fe6c" />
+
+```
 import pandas as pd
- from sklearn.feature_selection import SelectKBest, mutual_info_classif, f_classif
- data={
- 'Feature1': [1,2,3,4,5],
- 'Feature2': ['A','B','C','A','B'],
- 'Feature3': [0,1,1,0,1],
- 'Target'  : [0,1,1,0,1]
- }
- df=pd.DataFrame(data)
- x=df[['Feature1','Feature3']]
- y=df[['Target']]
- selector=SelectKBest(score_func=mutual_info_classif,k=1)
- x_new=selector.fit_transform(x,y)
- selected_feature_indices=selector.get_support(indices=True)
- selected_features=x.columns[selected_feature_indices]
- print("Selected Features:")
- print(selected_features)
+from sklearn.feature_selection import SelectKBest, chi2, f_classif 
+categorical_columns = ['JobType', 'EdType', 'maritalstatus', 'occupation', 'relationship', 'race', 'gender', 'nativecountry'] 
+df[categorical_columns] = df[categorical_columns].astype('category')
+df[categorical_columns]
+```
+
+<img width="707" height="490" alt="image" src="https://github.com/user-attachments/assets/b768b931-3f01-40a9-8647-403d05e6719c" />
 
 ```
-<img width="1692" height="83" alt="image" src="https://github.com/user-attachments/assets/3cc1eabd-e7dc-4713-a9be-58002738b079" />
+df[categorical_columns] = df[categorical_columns].apply(lambda x: x.cat.codes)
+df[categorical_columns]
+```
 
-```python
-
- import pandas as pd
- import numpy as np
- from scipy.stats import chi2_contingency
- import seaborn as sns
- tips=sns.load_dataset('tips')
- tips.head()
+<img width="677" height="368" alt="image" src="https://github.com/user-attachments/assets/ef7c1a08-1b4b-4068-a6b5-ee0eaf3117db" />
 
 ```
-<img width="818" height="201" alt="image" src="https://github.com/user-attachments/assets/c319d855-b6e5-4608-be90-22342939d594" />
+X = df.drop(columns=['SalStat']) 
+y = df['SalStat'] 
+k_chi2 = 6
+selector_chi2 = SelectKBest(score_func=chi2, k=k_chi2) 
+X_chi2 = selector_chi2.fit_transform(X, y) 
+selected_features_chi2 = X.columns[selector_chi2.get_support()] 
+print("Selected features using chi-square test:") 
+print(selected_features_chi2) 
+```
 
-
-```python
-
- tips.time.unique()
+<img width="611" height="94" alt="image" src="https://github.com/user-attachments/assets/92bdc874-47ad-43dd-b9a5-4a293eb68b73" />
 
 ```
-<img width="836" height="64" alt="image" src="https://github.com/user-attachments/assets/473926ef-fa99-4289-9a12-467ab7ede29f" />
+import pandas as pd
+from sklearn.feature_selection import SelectKBest, chi2, f_classif 
+from sklearn.model_selection import train_test_split 
+from sklearn.ensemble import RandomForestClassifier
+selected_features = ['age', 'maritalstatus', 'relationship', 'capitalgain', 'capitalloss', 'hoursperweek'] 
+X = df[selected_features] 
+y = df['SalStat'] 
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42) 
+rf = RandomForestClassifier(n_estimators=100, random_state=42) 
+rf.fit(X_train, y_train)
+```
 
-
-```python
-
- contingency_table=pd.crosstab(tips['sex'],tips['time'])
- print(contingency_table)
+<img width="356" height="94" alt="image" src="https://github.com/user-attachments/assets/1d9e1bba-fa30-4fc0-9b66-2cc0d9d85a89" />
 
 ```
-<img width="447" height="81" alt="image" src="https://github.com/user-attachments/assets/e2cdcde4-faf9-47a4-ba1d-6b6b7f34bb1a" />
+y_pred = rf.predict(X_test) 
+from sklearn.metrics import accuracy_score 
+accuracy = accuracy_score(y_test, y_pred) 
+print(f"Model accuracy using selected features: {accuracy}")
+```
 
-
-```python
-
- chi2,p,_,_=chi2_contingency(contingency_table)
- print(f"Chi-Square Statistics: {chi2}")
- print(f"P-Value: {p}")
+<img width="500" height="36" alt="image" src="https://github.com/user-attachments/assets/017f6fff-d5bb-4189-a974-5e83e00612bb" />
 
 ```
-<img width="528" height="47" alt="image" src="https://github.com/user-attachments/assets/264cf9b5-946c-4e5b-afae-d5d65f3da5da" />
+!pip install skfeature-chappers
+```
 
+<img width="634" height="386" alt="image" src="https://github.com/user-attachments/assets/657889b0-31dc-4e75-b768-66996b8547ed" />
 
-      
+```
+import numpy as np 
+import pandas as pd 
+from skfeature.function.similarity_based import fisher_score
+from sklearn.ensemble import RandomForestClassifier 
+from sklearn.model_selection import train_test_split 
+from sklearn.metrics import accuracy_score
+categorical_columns = [ 'JobType', 'EdType', 'maritalstatus', 'occupation', 'relationship', 'race', 'gender', 'nativecountry' ]
+df[categorical_columns] = df[categorical_columns].astype('category')
+df[categorical_columns]
+```
+
+<img width="691" height="361" alt="image" src="https://github.com/user-attachments/assets/8d659408-0ecc-4627-876d-74fba80d478c" />
+
+```
+X = df.drop(columns=['SalStat']) 
+y = df['SalStat']
+k_anova = 5 
+selector_anova = SelectKBest(score_func=f_classif,k=k_anova) 
+X_anova = selector_anova.fit_transform(X, y)
+selected_features_anova = X.columns[selector_anova.get_support()]
+print("\nSelected features using ANOVA:")
+print(selected_features_anova)
+```
+
+<img width="623" height="72" alt="image" src="https://github.com/user-attachments/assets/3b39c878-02dc-4352-8c92-cbbb0f4e8ce6" />
+
+```
+import pandas as pd 
+from sklearn.feature_selection import RFE 
+from sklearn.linear_model import LogisticRegression 
+df=pd.read_csv("income(1) (1).csv")
+categorical_columns = [ 'JobType', 'EdType', 'maritalstatus', 'occupation', 'relationship', 'race', 'gender', 'nativecountry' ]
+df[categorical_columns] = df[categorical_columns].astype('category')
+df[categorical_columns] = df[categorical_columns].apply(lambda x: x.cat.codes)
+df[categorical_columns]
+```
+
+<img width="683" height="372" alt="image" src="https://github.com/user-attachments/assets/dd6e1205-89dd-4673-b94c-a19f179d35e2" />
+
+```
+X = df.drop(columns=['SalStat']) 
+y = df['SalStat'] 
+logreg = LogisticRegression()
+n_features_to_select =6
+rfe = RFE(estimator=logreg, n_features_to_select=n_features_to_select) 
+rfe.fit(X, y)
+```
+
+<img width="826" height="847" alt="image" src="https://github.com/user-attachments/assets/338e7e40-4da5-4398-8894-0ca786d23aa8" />
+
 # RESULT:
 
- Thus the program to read the given data and perform Feature Scaling and Feature Selection process and
- save the data to a file is been executed.
+The given dataset was successfully read, and Feature Scaling and Feature Selection were performed. The selected and scaled features were saved successfully into a new data file.
+
